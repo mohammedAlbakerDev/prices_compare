@@ -36,3 +36,179 @@
     transform: rotate(360deg);
   }
 }
+.company-name {
+  margin-right: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #dac9c9; /* Adjust text color */
+}
+
+.company-id {
+  font-size: 1.2rem;
+  color: #dac9c9; /* Adjust text color */
+}
+.list-container {
+  width: 100%;
+  overflow-x: auto; /* Enable horizontal scroll on small screens */
+}
+
+@media (max-width: 768px) {
+  /* Tablet and mobile styles */
+  .list-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sider {
+  flex: 0 0 250px; /* Set fixed sidebar width */
+  transition: all 0.3s ease-in-out; /* Smooth sidebar collapse animation */
+}
+
+.site-layout {
+  flex: 1 1 auto; /* Main content area takes up remaining space */
+  margin: 0; /* Remove default margin for better layout */
+}
+
+.company-name,
+.company-id {
+  font-size: 1.2rem; /* Adjust font size for smaller screens */
+  margin-bottom: 5px; /* Add some spacing between header elements */
+}
+
+@media (max-width: 768px) {
+  /* Tablet and mobile styles */
+  .sidebar {
+    flex-direction: row; /* Change layout to row for better use of space */
+  }
+  
+  .sider {
+    flex: 1; /* Make sidebar take up full width on small screens */
+  }
+  
+  .site-layout {
+    display: flex;
+    flex-direction: column; /* Stack content vertically on small screens */
+  }
+  
+  .company-name,
+  .company-id {
+    text-align: center; /* Center header elements on small screens */
+  }
+}
+
+/* ListOfItems.css */
+
+.table-container {
+  overflow-x: auto;
+}
+
+/* Mobile screens */
+@media (max-width: 768px) {
+  .desktop-table {
+    display: none;
+  }
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .mobile-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  .mobile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  .mobile-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  .mobile-card-content {
+    font-size: 0.875rem;
+    color: #666;
+  }
+  .mobile-card-content p {
+    margin: 0.5rem 0;
+  }
+  .mobile-card-content .label {
+    font-weight: 600;
+    color: #333;
+  }
+  .mobile-card-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .edit-button, .delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  .edit-button .action-icon, .delete-button .action-icon {
+    font-size: 1.25rem;
+  }
+  .edit-button .action-icon {
+    color: #1890ff;
+  }
+  .delete-button .action-icon {
+    color: #ff4d4f;
+  }
+}
+
+/* Tablet and larger screens */
+@media (min-width: 769px) {
+  .desktop-table {
+    display: table;
+  }
+  .mobile-grid {
+    display: none;
+  }
+}
+
+
+/* header css*/
+@media (max-width: 768px) {
+  .company-name {
+    font-size: 1.2em;
+  }
+
+  .company-id {
+    font-size: 1em;
+  }
+
+  .ant-input-search {
+    width: 100% !important; /* Make search input full width on small screens */
+  }
+}
+
+
+/* fav icon style */
+.favorite-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.action-icon {
+  font-size: 16px;
+  color: #f39c12;
+}
