@@ -37,15 +37,16 @@ const SearchResultsPage = ({ searchResults, onSelectSearchResult }) => {
           )}
           {groupedResults[price].map(item => (
             <Card key={item.itemNumber} className="search-result-card">
-              <Title level={5}>{item.itemName}</Title>
+              <h3 className="mobile-card-title">{item.itemName}</h3>
               <Divider />
-              <Text strong>رقم المنتج:</Text> {item.itemNumber} <br />
-              <Text strong>سعر RMB:</Text> {item.priceInRmb} <br />
-              <Text strong>سعر الدولار:</Text> {item.priceInDollar} <br />
-              <Text strong>اسم الشركة:</Text> {item.companyName} <br />
-              <Text strong>رقم الشركة:</Text> {item.companyId} <br />
-              <Text strong>ملاحظات:</Text> {item.notes} <br />
-              <Text strong>عدد الكرتونات:</Text> {item.countInCarton} <br />
+              <div className="mobile-card-content">
+        <p><span className="label"> رقم او رمز المنتج &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;  </span> <span style={{color:'blue'}}>{item.itemNumber}</span></p>
+        <p><spna style={{color:'red'}}>&yen; </spna>{item.priceInRmb}<span className="label"> :  السعر الصيني RMB </span> </p>
+        <p><span style={{color:'Highlight'}}>&#13221; </span>{item.cbm}<span className="label"> : &nbsp;&nbsp;&nbsp;CBM(متر مكعب)</span> </p>
+        <p><span className="label">عدد داخل الصندوق &nbsp;&nbsp;&nbsp;: </span> {item.countInCarton}</p>
+        <p><span style={{color:'green'}}>$</span><span className="label">السعر بالدولار &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span> {item.priceInDollar}</p>
+        <p><span style={{color:'#b87e13'}}>{item.notes}</span><span className="label"> : ملاحظات</span> </p>
+      </div>
               <Button
                 type="primary"
                 icon={<DollarCircleOutlined />}

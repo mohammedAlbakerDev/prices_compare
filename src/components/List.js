@@ -71,12 +71,12 @@ const ListOfItems = ({ company, onEditItem, onDeleteItem }) => {
     <div className="mobile-card" key={item.itemId}>
       <h3 className="mobile-card-title">{item.itemName}</h3>
       <div className="mobile-card-content">
-        <p><span className="label">رقم المنتج:</span> {item.itemNumber}</p>
-        <p><span className="label">السعر الصيني:</span> {item.priceInRmb}</p>
-        <p><span className="label">CBM:</span> {item.cbm}</p>
-        <p><span className="label">عدد داخل الصندوق:</span> {item.countInCarton}</p>
-        <p><span className="label">السعر بالدولار:</span> {item.priceInDollar}</p>
-        <p><span className="label">ملاحظات:</span> {item.notes}</p>
+        <p><span className="label"> رقم او رمز المنتج &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;  </span> <span style={{color:'blue'}}>{item.itemNumber}</span></p>
+        <p><spna style={{color:'red'}}>&yen; </spna>{item.priceInRmb}<span className="label"> :  السعر الصيني RMB </span> </p>
+        <p><span style={{color:'Highlight'}}>&#13221; </span>{item.cbm}<span className="label"> : &nbsp;&nbsp;&nbsp;CBM(متر مكعب)</span> </p>
+        <p><span className="label">عدد داخل الصندوق &nbsp;&nbsp;&nbsp;: </span> {item.countInCarton}</p>
+        <p><span style={{color:'green'}}>$</span><span className="label">السعر بالدولار &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span> {item.priceInDollar}</p>
+        <p><span style={{color:'#b87e13'}}>{item.notes}</span><span className="label"> : ملاحظات</span> </p>
       </div>
       <div className="mobile-card-actions">
         <button className="edit-button" onClick={() => handleEdit(item)}>
