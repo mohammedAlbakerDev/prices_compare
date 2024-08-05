@@ -38,7 +38,7 @@ const SideBar = () => {
           ...selectedCompany.items,
           {
             ...values,
-            priceInDollar: ((((values.priceInRmb / 7.22) * values.countInCarton) + 15) / values.countInCarton).toFixed(1),
+            priceInDollar: ((((values.priceInRmb / 7.22) * values.countInCarton) + 15) / values.countInCarton).toFixed(2),
             itemId: Date.now().toString(),
           },
         ],
@@ -50,7 +50,7 @@ const SideBar = () => {
   const handleEditItem = (updatedItem) => {
     if (selectedCompany) {
       const updatedItems = selectedCompany.items.map((item) =>
-        item.itemId === updatedItem.itemId ? { ...updatedItem, priceInDollar: ((((updatedItem.priceInRmb / 7.22) * updatedItem.countInCarton) + 15) / updatedItem.countInCarton).toFixed(1), } : item
+        item.itemId === updatedItem.itemId ? { ...updatedItem, priceInDollar: ((((updatedItem.priceInRmb / 7.22) * updatedItem.countInCarton) + 15) / updatedItem.countInCarton).toFixed(2), } : item
       );
 
       setSelectedCompany({
@@ -138,21 +138,6 @@ const SideBar = () => {
         </div>
       </Sider>
       <Layout className="site-layout">
-        {/* <Header style={{ padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {selectedCompany && (
-              <>
-                <h1 className="company-name">{selectedCompany?.companyName} : اسم الشركة</h1>
-                <h2 className="company-id">{selectedCompany?.companyId} : رقم الشركة</h2>
-              </>
-            )}
-          </div>
-          <Input.Search
-            placeholder="ابحث عن منتج"
-            onChange={(e) => handleSearch(e.target.value)}
-            style={{ width: 200, borderRadius: '5px', border: 'none', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}
-          />
-        </Header> */}
         <Header
   style={{
     padding: '',
@@ -208,7 +193,7 @@ const SideBar = () => {
             )}
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Mohammed Albaker ©{new Date().getFullYear()} Created by dev mohammed</Footer>
+        <Footer style={{ textAlign: 'center' }}>Mohammed Albaker ©{new Date().getFullYear()} Created by dev mohammed ismael</Footer>
       </Layout>
 
       <Modal

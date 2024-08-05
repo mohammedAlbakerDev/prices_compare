@@ -5,9 +5,28 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 750;
+  margin: 0; /* Ensure no default margin */
+  padding: 0; /* Ensure no default padding */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Landscape mode */
+@media only screen and (orientation: landscape) {
+  .App-header {
+    flex-direction: row; /* Align header elements horizontally in landscape mode */
+    justify-content: space-around; /* Space out header items */
+  }
+}
+
+/* Portrait mode */
+@media only screen and (orientation: portrait) {
+  body {
+    overflow: auto; /* Enable scrolling */
+    transform: none; /* Remove rotation */
+  }
+  
+  .container {
+    width: 100vw;
+    height: auto; /* Adjust height as needed */
+    overflow: auto;
+  }
 }

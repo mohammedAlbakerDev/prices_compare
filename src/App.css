@@ -212,3 +212,23 @@
   font-size: 16px;
   color: #f39c12;
 }
+/* Landscape mode (default) */
+@media only screen and (orientation: landscape) {
+  /* Your landscape-specific styles */
+}
+@media only screen and (orientation: portrait) {
+  body {
+    transform: rotate(90deg);
+    transform-origin: left top;
+    width: 100vh;
+    height: 100vw;
+    overflow: hidden;
+  }
+
+  /* Additional styles to fit the rotated layout */
+  .container {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+  }
+}
