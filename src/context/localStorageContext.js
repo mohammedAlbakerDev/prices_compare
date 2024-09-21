@@ -29,11 +29,19 @@ const LocalStorageProvider = ({ children }) => {
     setCompanies((prevCompanies) => {
       const updatedCompanies = prevCompanies.map((company) => {
         if (company.companyId === companyId) {
+          const priceInDollar = item.priceInDollar || 0;
+          const priceInRmb = item.priceInRmb || 0;
+  
           const newItem = {
             ...item,
-            priceInDollar: ((((item.priceInRmb / 7.22) * item.countInCarton) + 15) / item.countInCarton).toFixed(2),
+            priceInDollar: priceInDollar,
+            priceInRmb: priceInRmb,
             itemId: Date.now().toString(),
+            calculatedPriceAfterCosts: company.currency === 'USD'
+              ? ((priceInDollar * item.countInCarton) + (item.cbm * 160)) / item.countInCarton
+              : ((priceInRmb / 7.22) * item.countInCarton + (item.cbm * 160)) / item.countInCarton,
           };
+  
           return { ...company, items: [...company.items, newItem] };
         }
         return company;
@@ -41,13 +49,18 @@ const LocalStorageProvider = ({ children }) => {
       return updatedCompanies;
     });
   };
-
+  
   const updateItemInCompany = (companyId, updatedItem) => {
     setCompanies((prevCompanies) => {
       return prevCompanies.map((company) => {
         if (company.companyId === companyId) {
           const updatedItems = company.items.map((item) =>
-            item.itemId === updatedItem.itemId ? { ...updatedItem, priceInDollar: ((((updatedItem.priceInRmb / 7.22) * updatedItem.countInCarton) + 15) / updatedItem.countInCarton).toFixed(2) } : item
+            item.itemId === updatedItem.itemId ? {
+              ...updatedItem,
+              calculatedPriceAfterCosts: company.currency === 'USD'
+                ? ((updatedItem.priceInDollar * updatedItem.countInCarton) + (updatedItem.cbm * 160)) / updatedItem.countInCarton
+                : ((updatedItem.priceInRmb / 7.22) * updatedItem.countInCarton + (updatedItem.cbm * 160)) / updatedItem.countInCarton,
+            } : item
           );
           return { ...company, items: updatedItems };
         }
@@ -55,7 +68,7 @@ const LocalStorageProvider = ({ children }) => {
       });
     });
   };
-
+  
   const deleteItemFromCompany = (companyId, itemId) => {
     setCompanies((prevCompanies) => {
       return prevCompanies.map((company) => {

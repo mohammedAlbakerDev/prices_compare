@@ -193,14 +193,17 @@
 @media (max-width: 768px) {
   .company-name {
     font-size: 1.2em;
+    margin-bottom: 0px;
   }
 
   .company-id {
     font-size: 1em;
+    margin-bottom: 0px;
   }
 
   .ant-input-search {
     width: 100% !important; /* Make search input full width on small screens */
+    
   }
 }
 

@@ -1,11 +1,9 @@
 import React, { useState, useContext, useRef } from 'react';
-import { Layout, Menu, Button, Modal, Input, Form } from 'antd';
+import { Layout, Menu, Button, Modal, Input, Form, Radio } from 'antd';
 import { LocalStorageContext } from '../context/localStorageContext';
 import ListOfItems from './List';
 import { PlusOutlined } from '@ant-design/icons';
 import SearchResultsPage from './SearchResultsPage';
-import NewCompanyForm from './newCompanyForm'; // Import the new component
-
 const { Header, Content, Footer, Sider } = Layout;
 
 const SideBar = () => {
@@ -20,37 +18,58 @@ const SideBar = () => {
   const [isSearchPage, setIsSearchPage] = useState(false);
   const addItemFormRef = useRef(null);
 
+  // Handle adding a company with a currency (RMB or USD)
   const handleAddCompany = (values) => {
     addCompany({
       companyName: values.companyName,
       companyId: values.companyId,
+      currency: values.currency, // Add currency field
       items: [],
     });
     setIsModalVisible(false);
   };
 
+  // Handle adding an item and calculate the price in Dollar or RMB
   const handleAddItem = (values) => {
     if (selectedCompany) {
-      addItemToCompany(selectedCompany.companyId, values);
+      const item = {
+        ...values,
+        itemId: Date.now().toString(),
+        // If company uses RMB, calculate price in Dollar. If USD, use the price in USD and also calculate total costs.
+        priceInDollar: selectedCompany.currency === 'RMB'
+          ? ((((values.priceInRmb / 7.22) * values.countInCarton) + (values.cbm * 160)) / values.countInCarton).toFixed(2)
+          : values.priceInUsd,
+        //   : ((((values.priceInUsd) * values.countInCarton) + (values.cbm * 160)) / values.countInCarton).toFixed(2),
+      };
+
+      addItemToCompany(selectedCompany.companyId, item);
+
+      // Update the selected company with the new item
       setSelectedCompany({
         ...selectedCompany,
         items: [
           ...selectedCompany.items,
-          {
-            ...values,
-            priceInDollar: ((((values.priceInRmb / 7.22) * values.countInCarton) + 15) / values.countInCarton).toFixed(2),
-            itemId: Date.now().toString(),
-          },
+          item,
         ],
       });
+
       setIsAddItemModalVisible(false);
     }
   };
 
+  // Handle editing item logic
   const handleEditItem = (updatedItem) => {
     if (selectedCompany) {
       const updatedItems = selectedCompany.items.map((item) =>
-        item.itemId === updatedItem.itemId ? { ...updatedItem, priceInDollar: ((((updatedItem.priceInRmb / 7.22) * updatedItem.countInCarton) + 15) / updatedItem.countInCarton).toFixed(2), } : item
+        item.itemId === updatedItem.itemId
+          ? {
+              ...updatedItem,
+              priceInDollar: selectedCompany.currency === 'RMB'
+                ? ((((updatedItem.priceInRmb / 7.22) * updatedItem.countInCarton) + (updatedItem.cbm * 160)) / updatedItem.countInCarton).toFixed(2)
+                : updatedItem.priceInUsd,
+                // : ((((updatedItem.priceInUsd) * updatedItem.countInCarton) + (updatedItem.cbm * 160)) / updatedItem.countInCarton).toFixed(2),
+            }
+          : item
       );
 
       setSelectedCompany({
@@ -115,7 +134,8 @@ const SideBar = () => {
     setIsSearchPage(false);
   };
 
-  return (
+
+return (
     <Layout style={{ minHeight: '100vh', marginTop: '-8px', marginLeft: '-8px' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" />
@@ -138,36 +158,24 @@ const SideBar = () => {
         </div>
       </Sider>
       <Layout className="site-layout">
-        <Header
-  style={{
-    padding: '',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap', // Enable wrapping for smaller screens
-  }}
->
-  <div style={{ display: 'flex',justifyContent:'center', alignItems: 'center', flexWrap: 'wrap' }}>
-    {selectedCompany && (
-      <>
-        <h1 className="company-name" style={{ margin: '0 40px 0 0' }}>{selectedCompany?.companyName} : اسم الشركة</h1>
-        <h2 className="company-id" style={{ margin: '0' }}>{selectedCompany?.companyId} : رقم الشركة</h2>
-      </>
-    )}
-  </div>
-  <Input.Search
-    placeholder="ابحث عن منتج"
-    onChange={(e) => handleSearch(e.target.value)}
-    style={{
-      width: '200 px',
-      borderRadius: '5px',
-      border: 'none',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-      marginTop: '-10px',
-    }}
-  />
-</Header>
-
+        <Header>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+            {selectedCompany && (
+              <>
+                <h1 className="company-name" style={{ margin: '0 40px 0 0' }}>{selectedCompany?.companyName} : اسم الشركة</h1>
+                <h2 className="company-id" style={{ margin: '0' }}>{selectedCompany?.companyId} : رقم الشركة</h2>
+                <h2 className="company-currency" style={{ margin: '0', marginLeft: '30px', color: 'green' }}>
+                  {selectedCompany?.currency === 'USD' ? '$ نوع العملة : دولار ' : ' صيني RMB : نوع العملة'}
+                </h2>
+              </>
+            )}
+          </div>
+          <Input.Search
+            placeholder="ابحث عن منتج"
+            onChange={(e) => handleSearch(e.target.value)}
+            style={{ width: '100%', borderRadius: '5px', border: 'none', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', marginTop: '-10px' }}
+          />
+        </Header>
 
         <Content style={{ margin: '0 16px' }}>
           <div style={{ padding: 24, minHeight: 360 }}>
@@ -202,7 +210,43 @@ const SideBar = () => {
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
-        <NewCompanyForm handleAddCompany={handleAddCompany} /> {/* Use the new component */}
+        <Form onFinish={handleAddCompany}>
+          <Form.Item
+            label="اسم الشركة"
+            name="companyName"
+            rules={[{ required: true, message: 'يرجى إدخال اسم الشركة' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="رقم الشركة"
+            name="companyId"
+            rules={[{ required: true, message: 'يرجى إدخال رقم الشركة' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="العملة"
+            name="currency"
+            rules={[{ required: true, message: 'يرجى اختيار العملة' }]}
+          >
+            <Radio.Group>
+              <Radio value="RMB">صيني RMB</Radio>
+              <Radio value="USD">دولار $</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item
+            label="ملاحظات"
+            name="notes"
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              اضف الشركة
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
 
       <Modal
@@ -213,37 +257,47 @@ const SideBar = () => {
       >
         <Form ref={addItemFormRef} onFinish={handleAddItem}>
           <Form.Item
-            label="اسم المنتج"
+            label="اسم البضاعة"
             name="itemName"
-            rules={[{ required: true, message: 'ادخل اسم البضاعة!' }]}
+            rules={[{ required: true, message: 'يرجى إدخال اسم البضاعة' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="رقم او رمز المنتج"
+            label="رقم البضاعة"
             name="itemNumber"
-            rules={[{ required: true, message: 'ادخل رقم او رمز المنتج!' }]}
+            rules={[{ required: true, message: 'يرجى إدخال رقم البضاعة' }]}
+          >
+            <Input />
+          </Form.Item>
+          {selectedCompany?.currency === 'RMB' ? (
+            <Form.Item
+              label="السعر (RMB)"
+              name="priceInRmb"
+              rules={[{ required: true, message: 'يرجى إدخال السعر  RMB' }]}
+            >
+              <Input />
+            </Form.Item>
+          ) : (
+            <Form.Item
+              label="السعر (بالدولار)"
+              name="priceInUsd"
+              rules={[{ required: true, message: 'يرجى إدخال السعر بالدولار' }]}
+            >
+              <Input />
+            </Form.Item>
+          )}
+          <Form.Item
+            label="CBM"
+            name="cbm"
+            rules={[{ required: true, message: 'يرجى إدخال CBM' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="السعر الصيني RMB"
-            name="priceInRmb"
-            rules={[{ required: true, message: 'ادخل السعر RMB!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-          name="cbm"
-          label="CBM"
-          rules={[{ required: true, message: 'ادخل CBM!' }]}
-        >
-          <Input />
-        </Form.Item>
-          <Form.Item
-            label="عدد المنتج داخل الصندوق"
+            label="العدد في الكرتون"
             name="countInCarton"
-            rules={[{ required: true, message: 'ادخل عدد المنتج داخل الصندوق' }]}
+            rules={[{ required: true, message: 'يرجى إدخال العدد في الكرتون' }]}
           >
             <Input />
           </Form.Item>
