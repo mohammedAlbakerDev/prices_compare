@@ -36,7 +36,7 @@ const SearchResultsPage = ({ searchResults, onSelectSearchResult,  }) => {
   // Helper function to display prices with proper conversions
   const displayPrices = (item) => {
     const company = companies.find(company => company.companyId === item.companyId);
-    const currency = company ? company.currency : 'RMB'; // Default to RMB if no company found
+    const currency = company ? company?.currency : 'RMB'; // Default to RMB if no company found
 
     if (currency === 'USD') {
       // For USD, display the original price in USD and converted price in RMB
